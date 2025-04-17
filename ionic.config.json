@@ -1,0 +1,7 @@
+{
+  "name": "CallTime",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
