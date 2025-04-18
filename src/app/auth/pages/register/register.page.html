@@ -10,22 +10,26 @@
       <ion-item>
         <ion-input formControlName="name" placeholder="Nombre"></ion-input>
       </ion-item>
+
       <ion-item>
         <ion-input formControlName="lastname" placeholder="Apellido"></ion-input>
       </ion-item>
+
       <ion-item>
         <ion-input formControlName="phone" type="tel" placeholder="Teléfono"></ion-input>
       </ion-item>
+
       <ion-item>
-        <ion-input formControlName="email" type="email" placeholder="Correo"></ion-input>
+        <ion-input formControlName="email" type="email" placeholder="Correo electrónico"></ion-input>
       </ion-item>
+
       <ion-item>
         <ion-input formControlName="password" type="password" placeholder="Contraseña"></ion-input>
       </ion-item>
     </ion-list>
 
-    <ion-button type="submit" expand="full" [disabled]="isLoading || registerForm.invalid">
-      Registrar
+    <ion-button expand="full" type="submit" [disabled]="isLoading || registerForm.invalid">
+      {{ isLoading ? 'Registrando...' : 'Registrar' }}
     </ion-button>
   </form>
 </ion-content>
