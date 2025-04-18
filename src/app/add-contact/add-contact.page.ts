@@ -1,6 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+
+// Definir la interfaz Contact
+interface Contact {
+  id: string;
+  name: string;
+  phone: string;
+}
 
 @Component({
   selector: 'app-add-contact',
@@ -18,20 +25,28 @@ export class AddContactPage {
 
   saveContact() {
     if (this.contactForm.valid) {
-      const newContact = {
+      const newContact: Contact = {
         id: Date.now().toString(), // o usa UUID si prefieres
-        ...this.contactForm.value
+        name: this.contactForm.value.name ?? '', // Valor predeterminado si es null o undefined
+        phone: this.contactForm.value.phone ?? '' // Valor predeterminado si es null o undefined
       };
-  
-      // Guarda el nuevo contacto en LocalStorage
-      let contacts = JSON.parse(localStorage.getItem('contacts') || '[]');
-      contacts.push(newContact);
-      localStorage.setItem('contacts', JSON.stringify(contacts));
-  
-      // Navega de vuelta a la página de contactos
-      this.router.navigate(['home/contact-list']);
+
+      // Obtener los contactos desde el LocalStorage
+      let contacts: Contact[] = JSON.parse(localStorage.getItem('contacts') || '[]');
+
+      // Verificar si el teléfono ya está registrado
+      const existingContact = contacts.find(contact => contact.phone === newContact.phone);
+
+      if (existingContact) {
+        // Si el número ya está registrado, mostrar un mensaje de error
+        alert('Este número de teléfono ya está registrado.');
+      } else {
+        // Si el número no está registrado, agregar el nuevo contacto
+        alert('Este número no está registrado. Solo se pueden agregar contactos con números registrados.');
+      }
     } else {
       // Mostrar algún mensaje de error si el formulario no es válido
+      alert('Por favor, complete todos los campos correctamente.');
     }
   }
 }
