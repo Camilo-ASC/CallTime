@@ -1,35 +1,48 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Registro</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="register-page">
+  <div class="register-container">
+    <img src="assets/logo.png" alt="Logo" class="logo" />
 
-<ion-content>
-  <form [formGroup]="registerForm" (ngSubmit)="register()">
-    <ion-list>
-      <ion-item>
+    <h2 class="title">Crea tu cuenta</h2>
+    <p class="subtitle">Completa los campos para registrarte</p>
+
+    <form [formGroup]="registerForm" (ngSubmit)="register()">
+      <ion-item class="custom-input" lines="none">
+        <ion-icon name="person-outline" slot="start"></ion-icon>
         <ion-input formControlName="name" placeholder="Nombre"></ion-input>
       </ion-item>
 
-      <ion-item>
+      <ion-item class="custom-input" lines="none">
+        <ion-icon name="people-outline" slot="start"></ion-icon>
         <ion-input formControlName="lastname" placeholder="Apellido"></ion-input>
       </ion-item>
 
-      <ion-item>
+      <ion-item class="custom-input" lines="none">
+        <ion-icon name="call-outline" slot="start"></ion-icon>
         <ion-input formControlName="phone" type="tel" placeholder="Teléfono"></ion-input>
       </ion-item>
 
-      <ion-item>
+      <ion-item class="custom-input" lines="none">
+        <ion-icon name="mail-outline" slot="start"></ion-icon>
         <ion-input formControlName="email" type="email" placeholder="Correo electrónico"></ion-input>
       </ion-item>
 
-      <ion-item>
+      <ion-item class="custom-input" lines="none">
+        <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
         <ion-input formControlName="password" type="password" placeholder="Contraseña"></ion-input>
       </ion-item>
-    </ion-list>
 
-    <ion-button expand="full" type="submit" [disabled]="isLoading || registerForm.invalid">
-      {{ isLoading ? 'Registrando...' : 'Registrar' }}
-    </ion-button>
-  </form>
+      <ion-button
+        class="register-button"
+        expand="block"
+        type="submit"
+        [disabled]="isLoading || registerForm.invalid"
+      >
+        {{ isLoading ? 'Registrando...' : 'Registrar' }}
+      </ion-button>
+    </form>
+
+    <div class="extra-links">
+      <a routerLink="/login">¿Ya tienes cuenta? <span>Inicia sesión</span></a>
+    </div>
+  </div>
 </ion-content>
