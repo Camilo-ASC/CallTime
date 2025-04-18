@@ -1,20 +1,18 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="home-page">
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="home-container">
+    <img src="assets/logo.png" alt="Logo" class="logo" />
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+    <h1 class="title">¡Bienvenido!</h1>
+    <p class="subtitle">{{ userEmail }}</p>
+
+    <ion-button expand="block" class="home-button" (click)="goToContacts()">
+      Ver Contactos
+    </ion-button>
+
+    <ion-button expand="block" fill="clear" class="logout-button" (click)="logout()">
+      Cerrar Sesión
+    </ion-button>
   </div>
+
 </ion-content>

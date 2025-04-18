@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
+import { User } from 'firebase/auth'; // Opcional para tipado
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,9 @@ export class AuthService {
     private router: Router
   ) {}
 
+  /**
+   * ✨ Registro de usuario
+   */
   async register(email: string, password: string, data: { name: string; lastname: string; phone: string }) {
     const { name, lastname, phone } = data;
 
@@ -32,6 +36,9 @@ export class AuthService {
     return credential;
   }
 
+  /**
+   * 🔐 Login de usuario
+   */
   async login(email: string, password: string) {
     try {
       const userCredential = await this.afAuth.signInWithEmailAndPassword(email, password);
@@ -41,5 +48,20 @@ export class AuthService {
       console.error('Error en login:', error);
       throw error;
     }
+  }
+
+  /**
+   * 🔒 Obtiene el usuario actualmente autenticado
+   */
+  getCurrentUser(): User | null {
+    return this.afAuth.currentUser as unknown as User | null;
+  }
+
+  /**
+   * 🚪 Cierra sesión del usuario y redirige al login
+   */
+  async logout() {
+    await this.afAuth.signOut();
+    this.router.navigate(['/auth/login']);
   }
 }

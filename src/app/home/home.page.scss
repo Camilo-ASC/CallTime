@@ -1,27 +1,75 @@
-#container {
-  text-align: center;
+.home-page {
+  --background: linear-gradient(to bottom, #2a2a36, #5c5a73);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  animation: fadeIn 1s ease;
 
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  .home-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 24px;
+    background: #111117;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    animation: slideUpFade 0.8s ease;
+
+    .logo {
+      width: 64px;
+      margin: 0 auto 16px;
+      filter: drop-shadow(0 0 5px #e84e84);
+    }
+
+    .title {
+      font-size: 1.5rem;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: #cccccc;
+      margin-bottom: 24px;
+    }
+
+    .home-button {
+      margin-bottom: 12px;
+      --background: #e84e84;
+      --background-hover: #ff5c99;
+      --color: #fff;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    .logout-button {
+      color: #e84e84;
+      font-weight: bold;
+    }
+  }
 }
 
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
+// Animaciones ✨
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
-#container p {
-  font-size: 16px;
-  line-height: 22px;
-
-  color: #8c8c8c;
-
-  margin: 0;
-}
-
-#container a {
-  text-decoration: none;
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
