@@ -14,26 +14,34 @@ export class AuthService {
     private router: Router
   ) {}
 
-  // Actualización del método para aceptar un objeto en vez de múltiples parámetros
   async register(email: string, password: string, data: { name: string; lastname: string; phone: string }) {
-    const { name, lastname, phone } = data; // Desestructuramos el objeto recibido
+    console.log('✅ Registrando usuario...');
+    console.log('🧪 AngularFireAuth:', this.afAuth);
+    console.log('🧪 AngularFirestore (compat):', this.afs);
 
-    // Crear usuario con correo y contraseña
-    const credential = await this.afAuth.createUserWithEmailAndPassword(email, password);
-    const uid = credential.user?.uid;
+    const { name, lastname, phone } = data;
 
-    if (uid) {
-      // Si el uid es válido, guardar los datos adicionales en Firestore
-      await this.afs.collection('users').doc(uid).set({
-        uid,
-        email,
-        name,
-        lastname,
-        phone
-      });
+    try {
+      const credential = await this.afAuth.createUserWithEmailAndPassword(email, password);
+      const uid = credential.user?.uid;
+      console.log('🆔 UID generado:', uid);
+
+      if (uid) {
+        await this.afs.collection('users').doc(uid).set({
+          uid,
+          email,
+          name,
+          lastname,
+          phone
+        });
+        console.log('✅ Usuario guardado en Firestore correctamente.');
+      }
+
+      return credential;
+    } catch (error) {
+      console.error('❌ Error al registrar usuario:', error);
+      throw error;
     }
-
-    return credential;
   }
 
   login(email: string, password: string) {
