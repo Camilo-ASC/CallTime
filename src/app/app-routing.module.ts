@@ -23,6 +23,10 @@ const routes: Routes = [
     path: 'call-handler',
     loadChildren: () => import('./call-handler/call-handler.module').then(m => m.CallHandlerPageModule)
   },
+  {
+    path: 'edit-contact',
+    loadChildren: () => import('./edit-contact/edit-contact.module').then( m => m.EditContactPageModule)
+  },
 ];
 
 @NgModule({

@@ -1,13 +1,41 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>contact-list</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="contact-list-container">
+  <div class="contact-list-content">
+    <h2>Tus contactos</h2>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">contact-list</ion-title>
-    </ion-toolbar>
-  </ion-header>
+    <div *ngIf="contacts.length > 0; else noContacts">
+      <ion-list>
+        <ion-item *ngFor="let contact of contacts" lines="none" class="contact-item">
+          <ion-label>
+            {{ contact.name }}<br />
+            <small>{{ contact.phone }}</small>
+          </ion-label>
+          
+          <!-- Botón de editar -->
+          <ion-button fill="clear" slot="end" color="warning" (click)="editContact(contact)">
+            <ion-icon name="pencil-outline"></ion-icon>
+          </ion-button>
+
+          <!-- Botón de eliminar -->
+          <ion-button fill="clear" slot="end" color="danger" (click)="deleteContact(contact.id)">
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
+        </ion-item>
+      </ion-list>
+    </div>
+
+    <ng-template #noContacts>
+      <ion-text color="light">
+        <p>No tienes contactos aún.</p>
+      </ion-text>
+    </ng-template>
+
+    <div class="buttons-container">
+      <ion-button expand="block" color="primary" routerLink="/add-contact">
+        Agregar contacto
+      </ion-button>
+      <ion-button expand="block" color="medium" routerLink="/home">
+        Volver al inicio
+      </ion-button>
+    </div>
+  </div>
 </ion-content>
