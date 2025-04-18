@@ -1,54 +1,50 @@
 import { Injectable } from '@angular/core';
 
-interface Contact {
-  id: string;
-  name: string;
-  phone: string;
-}
-
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class ContactService {
-  private contacts: Contact[] = [];
+  private contacts: any[] = [];
 
   constructor() {
     this.loadContacts();
   }
 
   loadContacts() {
-    // Cargar los contactos desde LocalStorage
-    const savedContacts = JSON.parse(localStorage.getItem('contacts') || '[]');
-    this.contacts = savedContacts;
+    const storedContacts = localStorage.getItem('contacts');
+    this.contacts = storedContacts ? JSON.parse(storedContacts) : [];
   }
 
   getContacts() {
     return this.contacts;
   }
 
-  // Agregar un contacto
-  addContact(contact: Contact) {
-    this.contacts.push(contact);
-    this.updateLocalStorage();
+  getContactById(contactId: string) {
+    return this.contacts.find(contact => contact.id === contactId);
   }
 
-  // Editar un contacto
-  editContact(updatedContact: Contact) {
-    const index = this.contacts.findIndex(contact => contact.id === updatedContact.id);
+  addContact(contact: any) {
+    this.contacts.push(contact);
+    this.saveContacts();
+  }
+
+  updateContact(contactId: string, updatedContact: any) {
+    const index = this.contacts.findIndex(contact => contact.id === contactId);
     if (index !== -1) {
-      this.contacts[index] = updatedContact;
-      this.updateLocalStorage();
+      this.contacts[index] = { ...updatedContact, id: contactId };
+      this.saveContacts();
     }
   }
 
-  // Eliminar un contacto
   deleteContact(contactId: string) {
-    this.contacts = this.contacts.filter(contact => contact.id !== contactId);
-    this.updateLocalStorage();
+    const index = this.contacts.findIndex(contact => contact.id === contactId);
+    if (index !== -1) {
+      this.contacts.splice(index, 1);
+      this.saveContacts();
+    }
   }
 
-  // Actualizar el LocalStorage
-  private updateLocalStorage() {
+  saveContacts() {
     localStorage.setItem('contacts', JSON.stringify(this.contacts));
   }
 }

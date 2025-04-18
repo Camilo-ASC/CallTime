@@ -18,14 +18,18 @@ export class AddContactPage {
 
   saveContact() {
     if (this.contactForm.valid) {
-      const newContact = this.contactForm.value;
+      const newContact = {
+        id: Date.now().toString(), // o usa UUID si prefieres
+        ...this.contactForm.value
+      };
+  
       // Guarda el nuevo contacto en LocalStorage
       let contacts = JSON.parse(localStorage.getItem('contacts') || '[]');
       contacts.push(newContact);
       localStorage.setItem('contacts', JSON.stringify(contacts));
-
+  
       // Navega de vuelta a la página de contactos
-      this.router.navigate(['/contact-list']);
+      this.router.navigate(['home/contact-list']);
     } else {
       // Mostrar algún mensaje de error si el formulario no es válido
     }

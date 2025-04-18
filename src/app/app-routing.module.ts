@@ -24,7 +24,7 @@ const routes: Routes = [
     loadChildren: () => import('./call-handler/call-handler.module').then(m => m.CallHandlerPageModule)
   },
   {
-    path: 'edit-contact',
+    path: 'edit-contact/:id',
     loadChildren: () => import('./edit-contact/edit-contact.module').then( m => m.EditContactPageModule)
   },
 ];

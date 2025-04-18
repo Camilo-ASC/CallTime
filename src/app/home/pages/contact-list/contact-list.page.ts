@@ -28,9 +28,8 @@ export class ContactListPage implements OnInit {
   }
 
   editContact(contact: any) {
-    this.navCtrl.navigateForward('/edit-contact', {
-      queryParams: { contactId: contact.id },
-    });
+    // Aquí estamos pasando el ID del contacto de forma correcta
+    this.navCtrl.navigateForward(['/edit-contact', contact.id]);
   }
 
   deleteContact(contactId: string) {
