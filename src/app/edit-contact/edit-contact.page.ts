@@ -10,7 +10,7 @@ import { ContactService } from 'src/app/core/services/contact.service';
 })
 export class EditContactPage implements OnInit {
   contactId: string = '';
-  contact: any = { name: '', phone: '' };
+  contact: any = { name: '', lastname: '', phone: '' };
 
   constructor(
     private activatedRoute: ActivatedRoute,

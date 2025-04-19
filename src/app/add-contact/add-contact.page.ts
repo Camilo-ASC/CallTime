@@ -73,9 +73,15 @@ export class AddContactPage implements OnDestroy {
         lastname: this.lastname.trim(),
         phone: this.phone.trim()
       };
-
+      
+      // 1. Guardar en Firestore
       const userDocRef = doc(this.db, `users/${userUID}/contacts/${this.phone}`);
       await setDoc(userDocRef, contactData, { merge: true });
+      
+      // 2. Guardar en LocalStorage
+      const storedContacts = JSON.parse(localStorage.getItem('contacts') || '[]');
+      storedContacts.push({ id: this.phone, ...contactData });
+      localStorage.setItem('contacts', JSON.stringify(storedContacts));
 
       console.log("Contacto guardado bajo el usuario autenticado.");
       await this.showSuccessMessage("Contacto guardado exitosamente.");

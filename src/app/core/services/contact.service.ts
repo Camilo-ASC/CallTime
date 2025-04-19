@@ -79,11 +79,12 @@ export class ContactService {
     localStorage.setItem('contacts', JSON.stringify(this.contacts));
   }
 
-  updateContact(contactId: string, updatedContact: any) {
-    const index = this.contacts.findIndex(contact => contact.id === contactId);
+  updateContact(id: string, updatedContact: any) {
+    const contacts = this.getContacts();
+    const index = contacts.findIndex(c => c.id === id);
     if (index !== -1) {
-      this.contacts[index] = { ...updatedContact, id: contactId };
-      this.saveContacts();
+      contacts[index] = { id, ...updatedContact };
+      localStorage.setItem('contacts', JSON.stringify(contacts));
     }
   }
 

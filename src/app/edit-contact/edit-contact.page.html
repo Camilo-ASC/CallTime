@@ -15,6 +15,11 @@
     </ion-item>
 
     <ion-item>
+      <ion-label position="floating">Apellido</ion-label>
+      <ion-input [(ngModel)]="contact.lastname" name="lastname" required></ion-input>
+    </ion-item>
+
+    <ion-item>
       <ion-label position="floating">Teléfono</ion-label>
       <ion-input [(ngModel)]="contact.phone" name="phone" type="tel" required></ion-input>
     </ion-item>
