@@ -1,0 +1,43 @@
+.add-contact-page {
+    --background: linear-gradient(to bottom, #2a2a36, #5c5a73);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    
+    .contact-container {
+      width: 100%;
+      max-width: 400px;
+      padding: 24px;
+      background: #111117;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      
+      .custom-input {
+        --background: #1e1e2d;
+        --color: #fff;
+        --placeholder-color: #888;
+        --highlight-color-focused: #e84e84;
+        border-radius: 8px;
+        margin-bottom: 12px;
+    
+        ion-input {
+          padding-left: 8px;
+        }
+      }
+  
+      .action-button {
+        margin-top: 16px;
+        --background: #e84e84;
+        --background-hover: #ff5c99;
+        --color: #fff;
+        border-radius: 8px;
+        font-weight: bold;
+      }
+    }
+  }
+  

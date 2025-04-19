@@ -1,84 +1,82 @@
 .contact-list-container {
-    --background: linear-gradient(to bottom, #2a2a36, #5c5a73);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    animation: fadeIn 1s ease;
-  
-    .contact-list-content {
-      width: 100%;
-      max-width: 400px;
-      height: 100%;
-      padding: 24px;
-      background: #111117;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      animation: slideUpFade 0.8s ease;
-  
-      h2 {
-        font-size: 1.5rem;
-        color: #ffffff;
-        margin-bottom: 16px;
-      }
-  
-      .contact-item {
-        --background: #1e1e2d;
-        --color: #fff;
-        --highlight-color-focused: #e84e84;
-        border-radius: 8px;
-        margin-bottom: 12px;
-        padding: 12px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-  
-        ion-label {
-          color: #fff;
-          font-size: 1.1rem;
-        }
-  
-        ion-button {
-          margin-left: 8px;
-        }
-      }
-  
-      .buttons-container {
-        width: 100%;
-        max-width: 400px;
-        margin-top: 24px;
-  
-        ion-button {
-          margin-top: 12px;
-          font-weight: bold;
-          border-radius: 8px;
-        }
-      }
-    }
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: #111117;
+  height: 100%;
+  padding: 20px;
+}
+
+.contact-list-content {
+  width: 100%;
+  max-width: 600px; /* Ajusta según tu diseño */
+  padding: 20px;
+  background: #1e1e2d;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+h2 {
+  color: #ffffff;
+  margin-bottom: 16px;
+  font-size: 1.8rem;
+}
+
+.contact-item {
+  background: #2a2a36;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  padding: 16px;
+  color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  ion-label {
+    color: #ffffff;
   }
-  
-  // Animaciones ✨
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
+
+  ion-button {
+    margin-left: 8px;
   }
-  
-  @keyframes slideUpFade {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
+}
+
+.contact-item ion-label {
+  font-size: 1rem;
+}
+
+.buttons-container {
+  margin-top: 24px;
+  width: 100%;
+}
+
+.buttons-container ion-button {
+  margin-bottom: 12px;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.no-contacts-text {
+  font-size: 1rem;
+  color: #888;
+  text-align: center;
+}
+
+ion-button {
+  --border-radius: 8px;
+  --background: #e84e84;
+  --color: #fff;
+}
+
+ion-button[color='primary'] {
+  --background: #e84e84;
+  --background-hover: #ff5c99;
+}
+
+ion-button[color='medium'] {
+  --background: #4e5c67;
+  --background-hover: #6d7a83;
+}
