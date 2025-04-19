@@ -8,18 +8,23 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <form [formGroup]="contactForm" (ngSubmit)="saveContact()">
+  <form #form="ngForm" (ngSubmit)="addContact(form)">
     <ion-item>
       <ion-label position="floating">Nombre</ion-label>
-      <ion-input formControlName="name"></ion-input>
+      <ion-input [(ngModel)]="name" name="name" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Apellido</ion-label>
+      <ion-input [(ngModel)]="lastname" name="lastname" required></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label position="floating">Teléfono</ion-label>
-      <ion-input formControlName="phone" type="tel"></ion-input>
+      <ion-input [(ngModel)]="phone" name="phone" type="tel" required></ion-input>
     </ion-item>
 
-    <ion-button expand="block" type="submit" [disabled]="contactForm.invalid">
+    <ion-button expand="block" type="submit" [disabled]="form.invalid">
       Guardar
     </ion-button>
   </form>

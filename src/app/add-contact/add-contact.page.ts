@@ -1,13 +1,11 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-
-// Definir la interfaz Contact
-interface Contact {
-  id: string;
-  name: string;
-  phone: string;
-}
+import { Component, OnDestroy } from "@angular/core";
+import { ModalController, AlertController } from "@ionic/angular";
+import { getFirestore, collection, query, where, getDocs, doc, setDoc } from "firebase/firestore";
+import { initializeApp } from '@angular/fire/app';
+import { environment } from 'src/environments/environment';
+import { NgForm } from "@angular/forms";
+import { getAuth } from "firebase/auth";
+import { Subject } from "rxjs";
 
 @Component({
   selector: 'app-add-contact',
@@ -15,38 +13,109 @@ interface Contact {
   styleUrls: ['./add-contact.page.scss'],
   standalone: false
 })
-export class AddContactPage {
-  contactForm = this.fb.group({
-    name: ['', [Validators.required]],
-    phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]]
-  });
+export class AddContactPage implements OnDestroy {
+  name!: string;
+  lastname!: string;
+  phone!: string;
 
-  constructor(private fb: FormBuilder, private router: Router) {}
+  private app = initializeApp(environment.firebaseConfig);
+  private db = getFirestore(this.app);
+  private auth = getAuth(); // Obtener la autenticación de Firebase
+  private destroy$ = new Subject<void>();
 
-  saveContact() {
-    if (this.contactForm.valid) {
-      const newContact: Contact = {
-        id: Date.now().toString(), // o usa UUID si prefieres
-        name: this.contactForm.value.name ?? '', // Valor predeterminado si es null o undefined
-        phone: this.contactForm.value.phone ?? '' // Valor predeterminado si es null o undefined
+  constructor(
+    private modalController: ModalController,
+    private alertController: AlertController
+  ) {}
+
+  closeModal() {
+    this.modalController.dismiss();
+  }
+
+  async addContact(form: NgForm) {
+    if (!form.valid || !this.name.trim() || !this.lastname.trim() || !this.phone.trim()) {
+      await this.showErrorMessage("Por favor, complete todos los campos correctamente.");
+      return;
+    }
+
+    try {
+      // Verificar si el usuario está autenticado
+      const currentUser = this.auth.currentUser;
+
+      if (!currentUser) {
+        console.error("Usuario no autenticado.");
+        await this.showErrorMessage("Debe estar autenticado para agregar contactos.");
+        return;
+      }
+
+      const userUID = currentUser.uid;
+      console.log("Usuario autenticado UID:", userUID);
+
+
+
+
+      console.log("Buscando usuario con el número:", this.phone);
+      const usersCollectionRef = collection(this.db, "users");
+      const phoneQuery = query(usersCollectionRef, where("phone", "==", this.phone));
+      const querySnapshot = await getDocs(phoneQuery);
+      console.log("Resultados de la consulta:", querySnapshot);
+      if (querySnapshot.empty) {
+          console.error("No se encontró usuario con ese número.");
+          await this.showErrorMessage("No se encontró usuario con ese número. No se puede agregar el contacto.");
+          return;
+      }
+
+      console.log("Usuario con el número encontrado. Agregando a contactos...");
+
+      // Guardar el contacto en la subcolección del usuario autenticado
+      const contactData = {
+        name: this.name.trim(),
+        lastname: this.lastname.trim(),
+        phone: this.phone.trim()
       };
 
-      // Obtener los contactos desde el LocalStorage
-      let contacts: Contact[] = JSON.parse(localStorage.getItem('contacts') || '[]');
+      const userDocRef = doc(this.db, `users/${userUID}/contacts/${this.phone}`);
+      await setDoc(userDocRef, contactData, { merge: true });
 
-      // Verificar si el teléfono ya está registrado
-      const existingContact = contacts.find(contact => contact.phone === newContact.phone);
+      console.log("Contacto guardado bajo el usuario autenticado.");
+      await this.showSuccessMessage("Contacto guardado exitosamente.");
+      this.modalController.dismiss({ success: true, contact: contactData });
 
-      if (existingContact) {
-        // Si el número ya está registrado, mostrar un mensaje de error
-        alert('Este número de teléfono ya está registrado.');
-      } else {
-        // Si el número no está registrado, agregar el nuevo contacto
-        alert('Este número no está registrado. Solo se pueden agregar contactos con números registrados.');
-      }
-    } else {
-      // Mostrar algún mensaje de error si el formulario no es válido
-      alert('Por favor, complete todos los campos correctamente.');
+      this.clearForm(form);
+    } catch (error: any) {
+      console.error("Error al agregar contacto:", error);
+      const errorMessage = error?.message || "Error desconocido";
+      await this.showErrorMessage(`Error: ${errorMessage}`);
     }
+  }
+
+  async showSuccessMessage(message: string) {
+    const alert = await this.alertController.create({
+      header: "¡Éxito!",
+      message: message,
+      buttons: ["Aceptar"]
+    });
+    await alert.present();
+  }
+
+  async showErrorMessage(message: string) {
+    const alert = await this.alertController.create({
+      header: "Error",
+      message: message,
+      buttons: ["Aceptar"]
+    });
+    await alert.present();
+  }
+
+  clearForm(form: NgForm) {
+    form.resetForm();
+    this.name = '';
+    this.lastname = '';
+    this.phone = '';
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
