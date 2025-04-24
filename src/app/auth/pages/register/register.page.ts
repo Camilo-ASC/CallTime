@@ -7,6 +7,7 @@ import { getFirestore, collection, doc, setDoc } from "firebase/firestore";
 import { initializeApp } from "firebase/app"; // <- aquí usas el SDK directo, no @angular/fire
 import { environment } from "src/environments/environment";
 import { User } from "src/app/core/interfaces/user";
+import { getDoc } from "firebase/firestore";
 
 @Component({
   selector: 'app-register',
@@ -63,6 +64,13 @@ export class RegisterPage {
       const userDocRef = doc(collection(this.db, "users"), firebaseUser.uid);
       await setDoc(userDocRef, userData);
 
+      // Verificar si el documento del usuario existe
+  const userDoc = await getDoc(userDocRef);
+  if (!userDoc.exists()) {
+    console.error("El documento del usuario no se creó correctamente.");
+    return;
+  }
+  console.log("Documento del usuario creado correctamente.");
       await this.showSuccessMessage();
 
     } catch (error: any) {

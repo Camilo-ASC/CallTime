@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { NgForm } from "@angular/forms";
 import { getAuth } from "firebase/auth";
 import { Subject } from "rxjs";
+import { getDoc } from "firebase/firestore";
 
 @Component({
   selector: 'app-add-contact',
@@ -49,7 +50,8 @@ export class AddContactPage implements OnDestroy {
       }
 
       const userUID = currentUser.uid;
-      console.log("Usuario autenticado UID:", userUID);
+      console.log("🔥 UID autenticado:", userUID);
+      console.log("📄 Intentando guardar en ruta:", `users/${userUID}/contacts/${this.phone}`);
 
 
 
@@ -74,9 +76,22 @@ export class AddContactPage implements OnDestroy {
         phone: this.phone.trim()
       };
       
+      // 0. Confirmar que el documento del usuario autenticado existe (esperar hasta que se confirme)
+const userDocPath = `users/${userUID}`;
+const userDoc = doc(this.db, userDocPath);
+const existingUserSnap = await getDoc(userDoc);
+
+if (!existingUserSnap.exists()) {
+  console.log("📄 El documento del usuario no existe. Creándolo primero.");
+  await setDoc(userDoc, {}, { merge: true });
+} else {
+  console.log("✅ El documento del usuario ya existe.");
+}
       // 1. Guardar en Firestore
       const userDocRef = doc(this.db, `users/${userUID}/contacts/${this.phone}`);
+      console.log("🧠 Comparando UID:", this.auth.currentUser?.uid, "con", userUID);
       await setDoc(userDocRef, contactData, { merge: true });
+      console.log("✅ Contacto guardado correctamente en Firestore.");
       
       // 2. Guardar en LocalStorage
       const storedContacts = JSON.parse(localStorage.getItem('contacts') || '[]');
