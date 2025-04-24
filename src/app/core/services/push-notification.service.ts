@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { PushNotifications } from '@capacitor/push-notifications';
 import { Capacitor } from '@capacitor/core';
-import { Firestore, doc, setDoc } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PushNotificationService {
-  constructor(private firestore: Firestore, private authService: AuthService) {}
+  constructor(private firestore: AngularFirestore, private authService: AuthService) {}
 
   initPush() {
     if (Capacitor.isNativePlatform()) {
@@ -18,9 +18,9 @@ export class PushNotificationService {
         }
       });
 
-      PushNotifications.addListener('registration', token => {
+      PushNotifications.addListener('registration', async token => {
         console.log('Token de notificación:', token.value);
-        this.saveTokenToFirestore(token.value);
+        await this.saveTokenToFirestore(token.value);
       });
 
       PushNotifications.addListener('registrationError', err => {
@@ -35,10 +35,16 @@ export class PushNotificationService {
   }
 
   async saveTokenToFirestore(token: string) {
-    const user = await this.authService.getCurrentUser(); // Asegúrate de que devuelva el UID
+    const user = await this.authService.getCurrentUser();
     if (user?.uid) {
-      const userRef = doc(this.firestore, `users/${user.uid}`);
-      await setDoc(userRef, { token }, { merge: true });
+      try {
+        await this.firestore.collection('users').doc(user.uid).set({ token }, { merge: true });
+        console.log('Token guardado en Firestore');
+      } catch (error) {
+        console.error('Error guardando token en Firestore:', error);
+      }
+    } else {
+      console.warn('No hay usuario autenticado. Token no guardado.');
     }
   }
 }

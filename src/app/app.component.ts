@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { PushNotifications } from '@capacitor/push-notifications';
 import { Platform } from '@ionic/angular';
-import { NotificationService } from './core/services/notification.service'; // Asegúrate de crear este servicio
+import { PushNotificationService } from './core/services/push-notification.service';
+
 
 @Component({
   selector: 'app-root',
@@ -10,31 +11,17 @@ import { NotificationService } from './core/services/notification.service'; // A
   standalone: false
 })
 export class AppComponent {
-  constructor(private platform: Platform, private notificationService: NotificationService) {
+  constructor(private platform: Platform, private PushNotificationService: PushNotificationService) {
     this.initializeApp();
   }
 
-  initializeApp() {
-    this.platform.ready().then(() => {
-      // Solicitar permisos para notificaciones
-      PushNotifications.requestPermissions().then((result) => {
-        if (result.receive === 'granted') {
-          // Registrar el dispositivo para recibir notificaciones
-          PushNotifications.register();
-
-          // Suscribirse a los eventos de las notificaciones
-          PushNotifications.addListener('registration', (token) => {
-            console.log('Token de registro:', token.value);
-            // Enviar el token al servicio para guardarlo en Firestore
-            this.notificationService.saveTokenInFirestore(token.value);
-          });
-
-          PushNotifications.addListener('pushNotificationReceived', (notification) => {
-            console.log('Notificación recibida:', notification);
-            // Aquí puedes manejar lo que sucede cuando se recibe una notificación
-          });
-        }
-      });
-    });
+  async initializeApp() {
+    await this.platform.ready();
+    try {
+      console.log('[App] Platform ready. Initializing push notifications...');
+      this.PushNotificationService.initPush();
+    } catch (error) {
+      console.error('[App] Error initializing push notifications:', error);
+    }
   }
 }
