@@ -1,7 +1,7 @@
 import { Component, OnDestroy } from "@angular/core";
 import { ModalController, AlertController } from "@ionic/angular";
 import { getFirestore, collection, query, where, getDocs, doc, setDoc } from "firebase/firestore";
-import { initializeApp } from '@angular/fire/app';
+import { initializeApp } from "firebase/app";
 import { environment } from 'src/environments/environment';
 import { NgForm } from "@angular/forms";
 import { getAuth } from "firebase/auth";

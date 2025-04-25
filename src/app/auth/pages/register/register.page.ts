@@ -1,13 +1,16 @@
-import { Component } from "@angular/core";
+import { Component, importProvidersFrom } from "@angular/core";
 import { AlertController } from "@ionic/angular";
 import { Router } from "@angular/router";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { getAuth, createUserWithEmailAndPassword, User as FirebaseUser } from "firebase/auth";
 import { getFirestore, collection, doc, setDoc } from "firebase/firestore";
 import { initializeApp } from "firebase/app"; // <- aquí usas el SDK directo, no @angular/fire
-import { environment } from "src/environments/environment";
+import { environment } from 'src/environments/environment';
 import { User } from "src/app/core/interfaces/user";
 import { getDoc } from "firebase/firestore";
+import { Platform } from "@ionic/angular";
+import { PlatformLocation } from "@angular/common";
+import { PushNotifications } from "@capacitor/push-notifications";
 
 @Component({
   selector: 'app-register',
@@ -27,7 +30,8 @@ export class RegisterPage {
   constructor(
     private alertController: AlertController,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private platform: Platform
   ) {
     this.registerForm = this.fb.group({
       name: ['', Validators.required],
@@ -63,6 +67,28 @@ export class RegisterPage {
 
       const userDocRef = doc(collection(this.db, "users"), firebaseUser.uid);
       await setDoc(userDocRef, userData);
+
+      // ✅ Guardamos el token FCM directamente tras el registro del usuario
+if (this.platform.is('capacitor')) {
+  try {
+    const permission = await PushNotifications.requestPermissions();
+    if (permission.receive === 'granted') {
+      await PushNotifications.register();
+
+      const fcmToken = await new Promise<string>((resolve, reject) => {
+        PushNotifications.addListener('registration', (token) => {
+          resolve(token.value);
+        });
+        PushNotifications.addListener('registrationError', reject);
+      });
+
+      console.log("Token FCM obtenido:", fcmToken);
+      await setDoc(userDocRef, { fcmToken }, { merge: true });
+    }
+  } catch (fcmError) {
+    console.error('❌ Error al obtener o guardar el token FCM:', fcmError);
+  }
+}
 
       // Verificar si el documento del usuario existe
   const userDoc = await getDoc(userDocRef);

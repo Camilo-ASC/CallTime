@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "559395675051",
+    "project_id": "calltimeuni",
+    "storage_bucket": "calltimeuni.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:559395675051:android:cefb4c52a3f57079d050ee",
+        "android_client_info": {
+          "package_name": "com.calltime.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBshFtgLdO1ceYadCOvqj8YAnjv8hxvVQk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

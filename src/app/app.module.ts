@@ -5,12 +5,13 @@ import { RouteReuseStrategy } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { initializeApp } from 'firebase/app';
 
 // Firebase compat
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
-import { environment } from '../environments/environment';
+import { environment } from 'src/environments/environment';
 
 @NgModule({
   declarations: [AppComponent],
